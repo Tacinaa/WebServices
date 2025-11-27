@@ -1,0 +1,84 @@
+type Category {
+    id: ID!
+    name: String!
+    description: String
+    products: [Product!]!
+}
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    price: Float!
+    stock: Int!
+    category: Category!
+    reviews: [Review!]!
+}
+
+type Review {
+    id: ID!
+    author: String!
+    comment: String
+    rating: Int!
+    createdAt: String
+    product: Product!
+}
+
+type Query {
+    # Catégories
+    categories: [Category!]!
+    category(id: ID!): Category
+
+    # Produits
+    products: [Product!]!
+    product(id: ID!): Product
+    productsByCategory(categoryId: ID!): [Product!]!
+
+    # Avis
+    reviews: [Review!]!
+    review(id: ID!): Review
+    reviewsByProduct(productId: ID!): [Review!]!
+}
+
+type Mutation {
+    # Catégories
+    createCategory(name: String!, description: String): Category!
+    updateCategory(id: ID!, name: String!, description: String): Category
+    deleteCategory(id: ID!): Boolean!
+
+    # Produits
+    createProduct(
+        name: String!
+        description: String
+        price: Float!
+        stock: Int!
+        categoryId: ID!
+    ): Product!
+
+    updateProduct(
+        id: ID!
+        name: String!
+        description: String
+        price: Float!
+        stock: Int!
+    ): Product
+
+    deleteProduct(id: ID!): Boolean!
+
+    # Avis
+    createReview(
+        productId: ID!
+        author: String!
+        comment: String
+        rating: Int!
+    ): Review!
+
+    updateReview(
+        id: ID!
+        author: String!
+        comment: String
+        rating: Int!
+    ): Review
+
+    deleteReview(id: ID!): Boolean!
+}

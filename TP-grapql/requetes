@@ -1,0 +1,55 @@
+//CATEGORY
+
+{
+  "query": "mutation { createCategory(name: \"Informatique\", description: \"Tout le matos tech\") { id name description } }"
+}
+
+{
+  "query": "{ categories { id name description } }"
+}
+
+//PRODUCT
+
+{
+  "query": "mutation { createProduct(name: \"PC Gamer\", description: \"Ordinateur puissant\", price: 1499.99, stock: 10, categoryId: 1) { id name price stock category { id name } } }"
+}
+
+{
+  "query": "{ products { id name price stock category { name } } }"
+}
+
+//REVIEW
+
+{
+  "query": "mutation { createReview(productId: 1, author: \"Tasnime\", comment: \"Très bon produit !\", rating: 5) { id author comment rating createdAt product { id name } } }"
+}
+
+{
+  "query": "{ reviews { id author rating product { name } } }"
+}
+
+{
+  "query": "{ reviewsByProduct(productId: 1) { id author rating comment } }"
+}
+
+{
+  "query": "mutation { updateReview(id: 1, author: \"Tasnime\", comment: \"Finalement très bon mais un peu cher\", rating: 4) { id comment rating } }"
+}
+
+{
+  "query": "mutation { deleteReview(id: 1) }"
+}
+
+//REQUETES IMBRIQUEES
+
+{
+  "query": "{ category(id: 1) { id name products { id name price } } }"
+}
+
+{
+  "query": "{ product(id: 1) { id name price category { name } reviews { id author rating comment } } }"
+}
+
+{
+  "query": "{ review(id: 1) { id author rating product { id name price } } }"
+}
