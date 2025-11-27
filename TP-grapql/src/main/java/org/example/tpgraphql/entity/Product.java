@@ -1,4 +1,4 @@
-package org.example.tpgrapql.entity;
+package org.example.tpgraphql.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

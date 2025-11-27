@@ -1,4 +1,4 @@
-package org.example.tpgrapql;
+package org.example.tpgraphql;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
-package org.example.tpgrapql.repository;
+package org.example.tpgraphql.repository;
 
-import org.example.tpgrapql.entity.Review;
+import org.example.tpgraphql.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
