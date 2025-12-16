@@ -20,3 +20,5 @@ spring:
       path: /graphiql
     http:
       path: /graphql
+server:
+  port: 8081
