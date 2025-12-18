@@ -23,6 +23,7 @@
         <module>order-service</module>
         <module>graphql-bff</module>
         <module>api-gateway</module>
+        <module>payment-service</module>
     </modules>
 
     <properties>
