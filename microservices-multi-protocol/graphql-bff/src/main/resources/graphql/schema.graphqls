@@ -43,7 +43,6 @@ type Order {
     createdAt: String
 }
 
-# Queries
 type Query {
     # Users
     users: [User!]!
@@ -59,9 +58,12 @@ type Query {
     orders: [Order!]!
     order(id: ID!): Order
     ordersByUser(userId: ID!): [Order!]!
+
+    # Payments ✅
+    payment(id: ID!): Payment
+    paymentsByOrder(orderId: ID!): [Payment!]!
 }
 
-# Mutations
 type Mutation {
     # Users
     createUser(input: CreateUserInput!): User!
@@ -77,6 +79,30 @@ type Mutation {
     createOrder(input: CreateOrderInput!): Order!
     updateOrderStatus(id: ID!, status: String!): Order!
     cancelOrder(id: ID!): Boolean!
+
+    # Payments ✅
+    processPayment(input: ProcessPaymentInput!): Payment!
+    updatePaymentStatus(id: ID!, status: String!): Payment!
+    refundPayment(id: ID!): Payment!
+}
+
+type Payment {
+    id: ID!
+    orderId: ID!
+    amount: Float!
+    currency: String!
+    status: String!
+    paymentMethod: String!
+    transactionId: String
+    createdAt: String
+    updatedAt: String
+}
+
+input ProcessPaymentInput {
+    orderId: ID!
+    amount: Float!
+    currency: String!
+    paymentMethod: String!
 }
 
 # Input Types

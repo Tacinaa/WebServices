@@ -1,5 +1,7 @@
 package com.microservices.graphql.resolver;
 
+import com.microservices.graphql.client.PaymentGrpcClient;
+import com.microservices.graphql.model.PaymentModel;
 import com.microservices.grpc.order.CreateOrderItemRequest;
 import com.microservices.graphql.client.OrderGrpcClient;
 import com.microservices.graphql.client.ProductGrpcClient;
@@ -9,6 +11,8 @@ import com.microservices.graphql.model.ProductModel;
 import com.microservices.graphql.model.UserModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.paymentservice.grpc.PaymentResponse;
+import org.example.paymentservice.grpc.PaymentStatus;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -32,6 +36,7 @@ public class GraphQLResolver {
     private final UserGrpcClient userClient;
     private final ProductGrpcClient productClient;
     private final OrderGrpcClient orderClient;
+    private final PaymentGrpcClient paymentClient;
 
     // ==================== USER QUERIES ====================
     
@@ -91,6 +96,21 @@ public class GraphQLResolver {
     public List<OrderModel> ordersByUser(@Argument Long userId) {
         log.info("🔮 [GraphQL] Query: ordersByUser({})", userId);
         return orderClient.getOrdersByUser(userId);
+    }
+
+    @QueryMapping
+    public PaymentModel payment(@Argument Long id) {
+        log.info("🔮 [GraphQL] Query: payment({})", id);
+        return toPaymentModel(paymentClient.getPayment(id));
+    }
+
+    @QueryMapping
+    public List<PaymentModel> paymentsByOrder(@Argument Long orderId) {
+        log.info("🔮 [GraphQL] Query: paymentsByOrder({})", orderId);
+        return paymentClient.getPaymentsByOrder(orderId)
+                .stream()
+                .map(this::toPaymentModel)
+                .toList();
     }
 
     // ==================== FIELD RESOLVERS ====================
@@ -194,5 +214,47 @@ public class GraphQLResolver {
     public Boolean cancelOrder(@Argument Long id) {
         log.info("🔮 [GraphQL] Mutation: cancelOrder({})", id);
         return orderClient.cancelOrder(id);
+    }
+
+    @MutationMapping
+    public PaymentModel processPayment(@Argument Map<String, Object> input) {
+        log.info("🔮 [GraphQL] Mutation: processPayment");
+
+        return toPaymentModel(
+                paymentClient.processPayment(
+                        ((Number) input.get("orderId")).longValue(),
+                        ((Number) input.get("amount")).doubleValue(),
+                        (String) input.get("currency"),
+                        (String) input.get("paymentMethod")
+                )
+        );
+    }
+
+    @MutationMapping
+    public PaymentModel updatePaymentStatus(@Argument Long id, @Argument String status) {
+        log.info("🔮 [GraphQL] Mutation: updatePaymentStatus({}, {})", id, status);
+        return toPaymentModel(
+                paymentClient.updatePaymentStatus(id, PaymentStatus.valueOf(status))
+        );
+    }
+
+    @MutationMapping
+    public PaymentModel refundPayment(@Argument Long id) {
+        log.info("🔮 [GraphQL] Mutation: refundPayment({})", id);
+        return toPaymentModel(paymentClient.refundPayment(id));
+    }
+
+    private PaymentModel toPaymentModel(PaymentResponse p) {
+        PaymentModel m = new PaymentModel();
+        m.setId(p.getId());
+        m.setOrderId(p.getOrderId());
+        m.setAmount(p.getAmount());
+        m.setCurrency(p.getCurrency());
+        m.setStatus(p.getStatus().name());
+        m.setPaymentMethod(p.getPaymentMethod());
+        m.setTransactionId(p.getTransactionId());
+        m.setCreatedAt(p.getCreatedAt());
+        m.setUpdatedAt(p.getUpdatedAt());
+        return m;
     }
 }
