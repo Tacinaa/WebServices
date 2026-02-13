@@ -45,3 +45,33 @@ Ce projet m’a permis de travailler sur :
 ## 📎 Statut
 
 Projet académique en cours d’évolution dans le cadre de la formation.
+
+## ▶️ Lancement du projet
+
+### Prérequis
+
+* Java 17+
+* Maven installé
+* IDE recommandé : IntelliJ IDEA
+
+### Étapes
+
+1. Cloner le dépôt :
+
+```bash
+git clone <url-du-repo>
+cd FoodExpress
+```
+
+2. Lancer chaque microservice en mode développement :
+
+```bash
+mvn quarkus:dev
+```
+
+3. Les API sont ensuite accessibles sur les ports configurés
+   (exemple : http://localhost:8082 pour le restaurant-service).
+
+### Tests des API
+
+Des fichiers `.http` sont fournis pour tester les endpoints directement depuis IntelliJ ou tout client HTTP (Postman, Insomnia, etc.).
