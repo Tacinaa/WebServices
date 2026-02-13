@@ -1,0 +1,82 @@
+### Base
+@baseUrl = http://localhost:8082
+@json = application/json
+
+### 1) CREATE Restaurant (201)
+POST {{baseUrl}}/api/restaurants
+Content-Type: {{json}}
+
+{
+  "name": "Pasta House",
+  "cuisine": "ITALIAN",
+  "address": "10 rue de la Cuisine",
+  "city": "Lille",
+  "phone": "+33611112222",
+  "rating": 4.5,
+  "openingTime": "11:00:00",
+  "closingTime": "23:00:00",
+  "active": true
+}
+
+> {% client.global.set("restaurantId", response.body.id); %}
+
+### 2) LIST Restaurants (200)
+GET {{baseUrl}}/api/restaurants
+
+### 3) GET Restaurant with menu (200)
+GET {{baseUrl}}/api/restaurants/{{restaurantId}}
+
+### 4) ADD Dish (201)
+POST {{baseUrl}}/api/restaurants/{{restaurantId}}/dishes
+Content-Type: {{json}}
+
+{
+  "name": "Spaghetti Carbonara",
+  "description": "Classic carbonara",
+  "price": 12.50,
+  "category": "MAIN",
+  "available": true,
+  "allergens": "EGGS, DAIRY"
+}
+
+> {% client.global.set("dishId", response.body.id); %}
+
+### 5) Dish EXISTS (true)
+GET {{baseUrl}}/api/restaurants/{{restaurantId}}/dishes/{{dishId}}/exists
+
+
+### 6) SEARCH by cuisine (200)
+GET {{baseUrl}}/api/restaurants/search?cuisine=ITALIAN
+
+### 7) UPDATE Restaurant (200)
+PUT {{baseUrl}}/api/restaurants/{{restaurantId}}
+Content-Type: {{json}}
+
+{
+  "name": "Pasta House Updated",
+  "cuisine": "ITALIAN",
+  "address": "12 rue de la Cuisine",
+  "city": "Lille",
+  "phone": "+33611112222",
+  "rating": 4.6,
+  "openingTime": "11:00:00",
+  "closingTime": "23:30:00",
+  "active": true
+}
+
+### 8) Simple Menu
+GET {{baseUrl}}/api/restaurants/{{restaurantId}}/menu
+Accept: text/plain
+
+### 9) Detailed Menu
+GET {{baseUrl}}/api/restaurants/{{restaurantId}}/menu
+Accept: application/json
+
+### 10) REMOVE Dish (204)
+DELETE {{baseUrl}}/api/restaurants/{{restaurantId}}/dishes/{{dishId}}
+
+### 11) Dish EXISTS after delete (false)
+GET {{baseUrl}}/api/restaurants/{{restaurantId}}/dishes/{{dishId}}/exists
+
+### 12) DELETE Restaurant (204)
+DELETE {{baseUrl}}/api/restaurants/{{restaurantId}}
