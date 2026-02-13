@@ -1,0 +1,72 @@
+### Base
+@baseUrl = http://localhost:8081
+@json = application/json
+
+### 1) CREATE - Customer A (201)
+POST {{baseUrl}}/api/customers
+Content-Type: {{json}}
+
+{
+  "firstName": "Tasnime",
+  "lastName": "Test",
+  "email": "tasnime.test1@mail.com",
+  "phone": "+33612345678",
+  "address": "1 rue du test",
+  "city": "Lille",
+  "zipCode": "59000"
+}
+
+> {% client.global.set("customerId", response.body.id); %}
+
+### 2) LIST (200)
+GET {{baseUrl}}/api/customers
+
+### 3) LIST with pagination (200)
+GET {{baseUrl}}/api/customers?page=0&size=1
+
+### 4) GET BY ID (200)
+GET {{baseUrl}}/api/customers/{{customerId}}
+
+### 5) EXISTS (true)
+GET {{baseUrl}}/api/customers/{{customerId}}/exists
+
+### 6) SEARCH BY CITY (200)
+GET {{baseUrl}}/api/customers/search?city=Lille
+
+### 7) UPDATE (200)
+PUT {{baseUrl}}/api/customers/{{customerId}}
+Content-Type: {{json}}
+
+{
+  "firstName": "Tasnime",
+  "lastName": "Updated",
+  "email": "tasnime.test1@mail.com",
+  "phone": "+33612345678",
+  "address": "2 rue update",
+  "city": "Lille",
+  "zipCode": "59000",
+  "active": true
+}
+
+### 8) VALIDATION ERROR (400) - invalid email
+POST {{baseUrl}}/api/customers
+Content-Type: {{json}}
+
+{
+  "firstName": "Amina",
+  "lastName": "BadEmail",
+  "email": "not-an-email",
+  "phone": "+33600000000",
+  "address": "3 rue fail",
+  "city": "Lille",
+  "zipCode": "59000"
+}
+
+### 9) NOT FOUND (404) - unknown id
+GET {{baseUrl}}/api/customers/99999999
+
+### 10) DELETE (204)
+DELETE {{baseUrl}}/api/customers/{{customerId}}
+
+### 11) EXISTS after delete (false)
+GET {{baseUrl}}/api/customers/{{customerId}}/exists

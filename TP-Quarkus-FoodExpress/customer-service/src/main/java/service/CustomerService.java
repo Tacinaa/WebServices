@@ -10,9 +10,12 @@ import java.util.Optional;
 @ApplicationScoped
 public class CustomerService {
 
-    public List<Customer> findAll() {
-        return Customer.listAll();
+    public List<Customer> findAll(int page, int size) {
+        return Customer.findAll()
+                .page(page, size)
+                .list();
     }
+
 
     public Optional<Customer> findById(Long id) {
         return Customer.findByIdOptional(id);

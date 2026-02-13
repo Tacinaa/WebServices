@@ -25,8 +25,11 @@ public class CustomerResource {
     }
 
     @GET
-    public List<Customer> list() {
-        return customerService.findAll();
+    public List<Customer> list(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size) {
+
+        return customerService.findAll(page, size);
     }
 
     @GET
