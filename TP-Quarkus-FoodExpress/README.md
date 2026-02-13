@@ -46,6 +46,8 @@ Ce projet m’a permis de travailler sur :
 
 Projet académique en cours d’évolution dans le cadre de la formation.
 
+---
+
 ## ▶️ Lancement du projet
 
 ### Prérequis
