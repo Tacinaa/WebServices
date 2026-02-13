@@ -1,0 +1,50 @@
+services:
+  pg-customer:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: customerdb
+      POSTGRES_USER: food
+      POSTGRES_PASSWORD: food
+    ports:
+      - "5441:5432"
+    volumes:
+      - pg_customer:/var/lib/postgresql/data
+
+  pg-restaurant:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: restaurantdb
+      POSTGRES_USER: food
+      POSTGRES_PASSWORD: food
+    ports:
+      - "5442:5432"
+    volumes:
+      - pg_restaurant:/var/lib/postgresql/data
+
+  pg-order:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: orderdb
+      POSTGRES_USER: food
+      POSTGRES_PASSWORD: food
+    ports:
+      - "5443:5432"
+    volumes:
+      - pg_order:/var/lib/postgresql/data
+
+  pg-delivery:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: deliverydb
+      POSTGRES_USER: food
+      POSTGRES_PASSWORD: food
+    ports:
+      - "5444:5432"
+    volumes:
+      - pg_delivery:/var/lib/postgresql/data
+
+volumes:
+  pg_customer:
+  pg_restaurant:
+  pg_order:
+  pg_delivery:
